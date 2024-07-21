@@ -6,10 +6,11 @@
 
 #ifndef ANALIZADORLEXICO_H
 
-enum class Token {
+enum class Token
+{
     ID,
     NUM,
-    MAYORIGUAL, 
+    MAYORIGUAL,
     MENORIGUAL,
     IGUAL,
     DOBLEIGUAL,
@@ -37,13 +38,14 @@ Token scaner();
 void mostrar(Token);
 void send(Token);
 Token espalres();
-std::vector <std::string> analizadorLexico () ;
+std::vector<std::string> analizadorLexico();
 
 std::ifstream f;
 char lexema[80];
-std::vector <std::string> tokens;
+std::vector<std::string> tokens;
 
-std::vector <std::string> analizadorLexico (){
+std::vector<std::string> analizadorLexico()
+{
     Token token;
     f.open("file.txt");
     if (!f.is_open())
@@ -64,12 +66,12 @@ std::vector <std::string> analizadorLexico (){
     return tokens;
 }
 
-
 Token scaner()
 {
     int c;
     int i;
-    while (true) {
+    while (true)
+    {
         c = f.get();
         if (c == EOF)
             return Token::EOF_TOKEN;
@@ -77,19 +79,26 @@ Token scaner()
         if (isspace(c))
             continue;
 
-        if (c == '/') {
+        if (c == '/')
+        {
             c = f.get();
-            if (c == '/') {
-                while (c != '\n' && c != EOF) {
+            if (c == '/')
+            {
+                while (c != '\n' && c != EOF)
+                {
                     c = f.get();
                 }
                 continue;
-            } else if (c == '*') {
-                while (true) {
+            }
+            else if (c == '*')
+            {
+                while (true)
+                {
                     c = f.get();
                     if (c == EOF)
                         return Token::EOF_TOKEN;
-                    if (c == '*') {
+                    if (c == '*')
+                    {
                         c = f.get();
                         if (c == '/')
                             break;
@@ -105,7 +114,7 @@ Token scaner()
     }
 
     // regla del ID
-    if (isalpha(c)) 
+    if (isalpha(c))
     {
         i = 0;
         do
@@ -115,15 +124,15 @@ Token scaner()
         } while (isalnum(c) || c == '_');
 
         lexema[i] = 0;
-        f.unget();   
-        Token token = espalres(); 
+        f.unget();
+        Token token = espalres();
         if (token != Token::UNKNOWN)
             return token;
-        return Token::ID; 
+        return Token::ID;
     }
 
     // regla del NUM
-    if (isdigit(c)) 
+    if (isdigit(c))
     {
         i = 0;
         do
@@ -146,7 +155,6 @@ Token scaner()
         return Token::MULTIPLICACION;
     if (c == '/')
         return Token::DIVISION;
-    
 
     // reglas de los delimitadores
     if (c == ';')
@@ -167,7 +175,7 @@ Token scaner()
         return Token::CIERRACORCHETE;
 
     // reglas de los operadores relacionales
-    if (c == '>') 
+    if (c == '>')
     {
         c = f.get();
         if (c == '=')
@@ -178,10 +186,10 @@ Token scaner()
             return Token::MAYORIGUAL;
         }
         f.unget();
-        return Token::MAYOR; 
+        return Token::MAYOR;
     }
 
-    if(c == '<')
+    if (c == '<')
     {
         c = f.get();
         if (c == '=')
@@ -195,7 +203,7 @@ Token scaner()
         return Token::MENOR;
     }
 
-    if(c == '=')
+    if (c == '=')
     {
         c = f.get();
         if (c == '=')
@@ -356,12 +364,12 @@ void send(Token token)
     case Token::ABRELLAVE:
         tokens.push_back("ABRELLAVE");
         break;
-    case Token::CIERRALLAVE:    
+    case Token::CIERRALLAVE:
         tokens.push_back("CIERRALLAVE");
         break;
     case Token::COMA:
         tokens.push_back("COMA");
-        break;  
+        break;
     case Token::ABRECORCHETE:
         tokens.push_back("ABRECORCHETE");
         break;
@@ -410,7 +418,6 @@ void send(Token token)
     default:
         tokens.push_back("UNKNOWN");
         break;
-
     }
 }
 
